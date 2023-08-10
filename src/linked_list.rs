@@ -1,15 +1,15 @@
-pub struct LinkedList {
-    head: Option<Box<Node>>,
+pub struct LinkedList<T> {
+    head: Option<Box<Node<T>>>,
 }
 
-struct Node {
-    data: u32,
-    next: Option<Box<Node>>,
+struct Node<T> {
+    data: T,
+    next: Option<Box<Node<T>>>,
 }
 
 #[allow(dead_code)]
-impl LinkedList {
-    fn new() -> LinkedList {
+impl<T> LinkedList<T> {
+    fn new() -> LinkedList<T> {
         LinkedList { head: None }
     }
 
@@ -17,16 +17,16 @@ impl LinkedList {
         self.head.is_none()
     }
 
-    fn push(&mut self, data: u32) {
+    fn push(&mut self, data: T) {
         let new_head = Box::new(Node{ data, next: self.head.take()});
         self.head = Some(new_head);
     }
 
-    fn pop(&mut self) -> Option<u32> {
+    fn pop(&mut self) -> Option<T> {
         self.head.take().map(|n| {self.head = n.next; n.data})
     }
 
-    fn peek(&self) -> Option<&u32> {
+    fn peek(&self) -> Option<&T> {
         self.head.as_ref().map(|n| {&n.data})
     }
 }
@@ -37,7 +37,7 @@ mod tests {
 
     #[test]
     fn test_create() {
-        let list = LinkedList::new();
+        let list: LinkedList<u32> = LinkedList::new();
         assert!(list.is_empty());
     }
     
